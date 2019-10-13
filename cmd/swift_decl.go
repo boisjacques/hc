@@ -7,15 +7,15 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/brutella/hc/gen"
-	"github.com/brutella/hc/gen/swift"
+	"github.com/boisjacques/hc/gen"
+	"github.com/boisjacques/hc/gen/swift"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 )
 
-var LibPath = os.ExpandEnv("$GOPATH/src/github.com/brutella/hc")
+var LibPath = os.ExpandEnv("$GOPATH/src/github.com/boisjacques/hc")
 var GenPath = filepath.Join(LibPath, "gen")
 var MetadataPath = filepath.Join(GenPath, "metadata.json")
 

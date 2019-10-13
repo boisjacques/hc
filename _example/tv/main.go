@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/brutella/hc"
-	"github.com/brutella/hc/accessory"
-	"github.com/brutella/hc/characteristic"
-	"github.com/brutella/hc/log"
-	"github.com/brutella/hc/service"
+	"github.com/boisjacques/hc"
+	"github.com/boisjacques/hc/accessory"
+	"github.com/boisjacques/hc/characteristic"
+	"github.com/boisjacques/hc/log"
+	"github.com/boisjacques/hc/service"
 )
 
 func addInputSource(t *accessory.Television, id int, name string, inputSourceType int) {

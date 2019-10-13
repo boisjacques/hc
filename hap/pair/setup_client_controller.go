@@ -1,13 +1,13 @@
 package pair
 
 import (
-	"github.com/brutella/hc/crypto"
-	"github.com/brutella/hc/crypto/chacha20poly1305"
-	"github.com/brutella/hc/crypto/hkdf"
-	"github.com/brutella/hc/db"
-	"github.com/brutella/hc/hap"
-	"github.com/brutella/hc/log"
-	"github.com/brutella/hc/util"
+	"github.com/boisjacques/hc/crypto"
+	"github.com/boisjacques/hc/crypto/chacha20poly1305"
+	"github.com/boisjacques/hc/crypto/hkdf"
+	"github.com/boisjacques/hc/db"
+	"github.com/boisjacques/hc/hap"
+	"github.com/boisjacques/hc/log"
+	"github.com/boisjacques/hc/util"
 
 	"bytes"
 	"encoding/hex"

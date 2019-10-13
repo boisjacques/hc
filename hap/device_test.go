@@ -1,7 +1,7 @@
 package hap
 
 import (
-	"github.com/brutella/hc/db"
+	"github.com/boisjacques/hc/db"
 	"os"
 	"reflect"
 	"testing"

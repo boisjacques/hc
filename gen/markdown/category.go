@@ -2,7 +2,7 @@ package markdown
 
 import (
 	"bytes"
-	"github.com/brutella/hc/gen"
+	"github.com/boisjacques/hc/gen"
 	"text/template"
 )
 

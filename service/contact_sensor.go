@@ -2,7 +2,7 @@
 package service
 
 import (
-	"github.com/brutella/hc/characteristic"
+	"github.com/boisjacques/hc/characteristic"
 )
 
 const TypeContactSensor = "80"

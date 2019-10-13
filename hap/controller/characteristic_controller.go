@@ -1,11 +1,11 @@
 package controller
 
 import (
-	"github.com/brutella/hc/accessory"
-	"github.com/brutella/hc/characteristic"
-	"github.com/brutella/hc/hap"
-	"github.com/brutella/hc/hap/data"
-	"github.com/brutella/hc/log"
+	"github.com/boisjacques/hc/accessory"
+	"github.com/boisjacques/hc/characteristic"
+	"github.com/boisjacques/hc/hap"
+	"github.com/boisjacques/hc/hap/data"
+	"github.com/boisjacques/hc/log"
 	"github.com/gosexy/to"
 
 	"bytes"

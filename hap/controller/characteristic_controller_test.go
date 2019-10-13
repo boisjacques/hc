@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"github.com/brutella/hc/accessory"
-	"github.com/brutella/hc/characteristic"
-	"github.com/brutella/hc/hap/data"
-	"github.com/brutella/hc/service"
+	"github.com/boisjacques/hc/accessory"
+	"github.com/boisjacques/hc/characteristic"
+	"github.com/boisjacques/hc/hap/data"
+	"github.com/boisjacques/hc/service"
 
 	"bytes"
 	"encoding/json"

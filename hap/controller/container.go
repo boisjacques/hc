@@ -3,7 +3,7 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/brutella/hc/accessory"
+	"github.com/boisjacques/hc/accessory"
 	"io"
 )
 

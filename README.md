@@ -10,10 +10,10 @@ You can focus on implementing the business logic for your accessory, without hav
 
 Here are some projects which use `hc`.
 
-- [hkcam](https://github.com/brutella/hkcam)
-- [hklifx](https://github.com/brutella/hklifx/)
-- [hkuvr](https://github.com/brutella/hkuvr)
-- [hksymo](https://github.com/brutella/hksymo)
+- [hkcam](https://github.com/boisjacques/hkcam)
+- [hklifx](https://github.com/boisjacques/hklifx/)
+- [hkuvr](https://github.com/boisjacques/hkuvr)
+- [hksymo](https://github.com/boisjacques/hksymo)
 
 **What is HomeKit?**
 
@@ -30,10 +30,10 @@ Checkout the official [website][home].
 
 [home]: https://hochgatterer.me/home/
 [home-appstore]: http://itunes.apple.com/app/id995994352
-[GoDoc]: https://godoc.org/github.com/brutella/hc
-[GoDoc Widget]: https://godoc.org/github.com/brutella/hc?status.svg
-[Travis]: https://travis-ci.org/brutella/hc
-[Travis Widget]: https://travis-ci.org/brutella/hc.svg
+[GoDoc]: https://godoc.org/github.com/boisjacques/hc
+[GoDoc Widget]: https://godoc.org/github.com/boisjacques/hc?status.svg
+[Travis]: https://travis-ci.org/boisjacques/hc
+[Travis Widget]: https://travis-ci.org/boisjacques/hc.svg
 
 ## Features
 
@@ -41,17 +41,17 @@ Checkout the official [website][home].
 - Supports all HomeKit [services and characteristics](service/README.md)
 - Built-in service announcement via DNS-SD using [dnssd](http://github.com/brutella/dnssd)
 - Runs on linux and macOS
-- Documentation: http://godoc.org/github.com/brutella/hc
+- Documentation: http://godoc.org/github.com/boisjacques/hc
 
 ## Getting Started
 
 1. [Install](http://golang.org/doc/install) and [set up](http://golang.org/doc/code.html#Organization) Go
-2. Create your own HomeKit accessory or clone an existing one (e.g.  [hklight](https://github.com/brutella/hklight))
+2. Create your own HomeKit accessory or clone an existing one (e.g.  [hklight](https://github.com/boisjacques/hklight))
 
         cd $GOPATH/src
         
         # Clone project
-        git clone https://github.com/brutella/hklight && cd hklight
+        git clone https://github.com/boisjacques/hklight && cd hklight
         
         # Run the project
         make run
@@ -76,8 +76,8 @@ package main
 
 import (
     "log"
-    "github.com/brutella/hc"
-    "github.com/brutella/hc/accessory"
+    "github.com/boisjacques/hc"
+    "github.com/boisjacques/hc/accessory"
 )
 
 func main() {
@@ -152,9 +152,9 @@ Matthias Hochgatterer
 
 Website: [https://hochgatterer.me](https://hochgatterer.me)
 
-Github: [https://github.com/brutella](https://github.com/brutella/)
+Github: [https://github.com/boisjacques](https://github.com/boisjacques/)
 
-Twitter: [https://twitter.com/brutella](https://twitter.com/brutella)
+Twitter: [https://twitter.com/boisjacques](https://twitter.com/boisjacques)
 
 
 # License

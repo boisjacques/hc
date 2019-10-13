@@ -3,7 +3,7 @@ package accessory
 import (
 	"crypto/md5"
 	"encoding/json"
-	"github.com/brutella/hc/log"
+	"github.com/boisjacques/hc/log"
 )
 
 // Container manages a list of accessories.
