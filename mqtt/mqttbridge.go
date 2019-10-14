@@ -36,6 +36,7 @@ func (mb *Bridge) createClientOptions(username string, password string, clientId
 func (mb *Bridge) listen(uri *url.URL, username string, password string, topic string, clientId string, c chan []byte) {
 	client := mb.connect(username, password, clientId, uri)
 	client.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
+		log.Println(msg)
 		c <- msg.Payload()
 	})
 }
