@@ -26,7 +26,7 @@ func (mb *Bridge) connect(username string, password string,clientId string, uri 
 
 func (mb *Bridge) createClientOptions(username string, password string, clientId string, uri *url.URL) *mqtt.ClientOptions {
 	opts := mqtt.NewClientOptions()
-	opts.AddBroker("tcp://192.168.2.252:1883")
+	opts.AddBroker("tcp://192.168.2.250:1883")
 	opts.SetUsername(username)
 	opts.SetPassword(password)
 	opts.SetClientID(clientId)
@@ -42,7 +42,7 @@ func (mb *Bridge) listen(uri *url.URL, username string, password string, topic s
 
 func NewMQTTBridge(username string, password string, topic string, clientId string, c chan []byte) *Bridge {
 	bridge := Bridge{}
-	uri, err := url.Parse("tcp://192.168.2.252:1883")
+	uri, err := url.Parse("tcp://192.168.2.250:1883")
 	if err != nil {
 		log.Fatal(err)
 	}
