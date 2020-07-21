@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/gosexy/to"
+	"github.com/xiam/to"
 )
 
 type ConnChangeFunc func(conn net.Conn, c *Characteristic, newValue, oldValue interface{})
@@ -13,7 +13,7 @@ type GetFunc func() interface{}
 
 // Characteristic is a HomeKit characteristic.
 type Characteristic struct {
-	ID          int64    `json:"iid"` // managed by accessory
+	ID          uint64   `json:"iid"` // managed by accessory
 	Type        string   `json:"type"`
 	Perms       []string `json:"perms"`
 	Description string   `json:"description,omitempty"` // manufacturer description (optional)
@@ -30,27 +30,10 @@ type Characteristic struct {
 	// unused
 	Events bool `json:"-"`
 
+	updateOnSameValue    bool // if true the update notifications
 	connValueUpdateFuncs []ConnChangeFunc
 	valueChangeFuncs     []ChangeFunc
 	valueGetFunc         GetFunc
-}
-
-// writeOnlyPerms returns true when permissions only include write permission
-func writeOnlyPerms(permissions []string) bool {
-	if len(permissions) == 1 {
-		return permissions[0] == PermWrite
-	}
-	return false
-}
-
-// noWritePerms returns true when permissions include no write permission
-func noWritePerms(permissions []string) bool {
-	for _, value := range permissions {
-		if value == PermWrite {
-			return false
-		}
-	}
-	return true
 }
 
 // NewCharacteristic returns a characteristic
@@ -111,12 +94,12 @@ func (c *Characteristic) Equal(other interface{}) bool {
 
 // Private
 
-func (c *Characteristic) isWriteOnly() bool {
-	return writeOnlyPerms(c.Perms)
+func (c *Characteristic) isReadable() bool {
+	return readPerm(c.Perms)
 }
 
-func (c *Characteristic) hasWritePerms() bool {
-	return noWritePerms(c.Perms) == false
+func (c *Characteristic) isWritable() bool {
+	return writePerm(c.Perms)
 }
 
 func (c *Characteristic) getValue(conn net.Conn) interface{} {
@@ -137,26 +120,23 @@ func (c *Characteristic) updateValue(value interface{}, conn net.Conn, checkPerm
 	// Value must be within min and max
 	switch c.Format {
 	case FormatFloat:
-		value = c.boundFloat64Value(value.(float64))
+		value = c.clampFloat(value.(float64))
 	case FormatUInt8, FormatUInt16, FormatUInt32, FormatUInt64, FormatInt32:
-		value = c.boundIntValue(value.(int))
+		value = c.clampInt(value.(int))
 	}
 
-	// Ignore when new value is same
-	if c.Value == value {
+	if c.Value == value && !c.updateOnSameValue {
 		return
 	}
 
 	// Ignore new values from remote when permissions don't allow write and checkPerms is true
-	if checkPerms == true && c.hasWritePerms() == false {
+	if checkPerms && !c.isWritable() {
 		return
 	}
 
 	old := c.Value
-	if c.isWriteOnly() == false {
+	if c.isReadable() {
 		c.Value = value
-	} else {
-		c.Value = nil
 	}
 
 	if conn != nil {
@@ -178,7 +158,7 @@ func (c *Characteristic) onValueUpdateFromConn(funcs []ConnChangeFunc, conn net.
 	}
 }
 
-func (c *Characteristic) boundFloat64Value(value float64) interface{} {
+func (c *Characteristic) clampFloat(value float64) interface{} {
 	min, minOK := c.MinValue.(float64)
 	max, maxOK := c.MaxValue.(float64)
 	if maxOK == true && value > max {
@@ -190,7 +170,7 @@ func (c *Characteristic) boundFloat64Value(value float64) interface{} {
 	return value
 }
 
-func (c *Characteristic) boundIntValue(value int) interface{} {
+func (c *Characteristic) clampInt(value int) interface{} {
 	min, minOK := c.MinValue.(int)
 	max, maxOK := c.MaxValue.(int)
 	if maxOK == true && value > max {
@@ -221,4 +201,25 @@ func (c *Characteristic) convert(v interface{}) interface{} {
 	default:
 		return v
 	}
+}
+
+// readPerm returns true when perms include read permission
+func readPerm(perms []string) bool {
+	for _, perm := range perms {
+		if perm == PermRead {
+			return true
+		}
+	}
+
+	return false
+}
+
+// writePerm returns true when perms include write permission
+func writePerm(permissions []string) bool {
+	for _, value := range permissions {
+		if value == PermWrite {
+			return true
+		}
+	}
+	return false
 }

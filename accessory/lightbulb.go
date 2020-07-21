@@ -15,8 +15,6 @@ func NewLightbulb(info Info) *Lightbulb {
 	acc.Accessory = New(info, TypeLightbulb)
 	acc.Lightbulb = service.NewLightbulb()
 
-	acc.Lightbulb.Brightness.SetValue(100)
-
 	acc.AddService(acc.Lightbulb.Service)
 
 	return &acc
