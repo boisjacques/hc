@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 )
 
-// Service is an HomeKit service consisting of characteristics.
+// Service is a HomeKit service consisting of characteristics.
 type Service struct {
 	ID              uint64
 	Type            string

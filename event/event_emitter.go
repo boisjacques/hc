@@ -23,7 +23,8 @@ func NewEmitter() Emitter {
 
 func (e *eventEmitter) Emit(ev interface{}) {
 	for _, l := range e.ls {
-		l.Handle(ev)
+		l.
+			Handle(ev)
 	}
 }
 

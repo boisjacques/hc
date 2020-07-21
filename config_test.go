@@ -4,8 +4,6 @@ import (
 	"github.com/boisjacques/hc/util"
 	"reflect"
 	"testing"
-
-	"github.com/brutella/hc/util"
 )
 
 var config = &Config{

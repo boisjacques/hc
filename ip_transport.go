@@ -9,7 +9,6 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/brutella/dnssd"
 	"github.com/boisjacques/hc/accessory"
 	"github.com/boisjacques/hc/characteristic"
 	"github.com/boisjacques/hc/db"
@@ -17,8 +16,9 @@ import (
 	"github.com/boisjacques/hc/hap"
 	"github.com/boisjacques/hc/hap/endpoint"
 	"github.com/boisjacques/hc/hap/http"
-	"github.com/boisjacques/hc/util"
 	"github.com/boisjacques/hc/log"
+	"github.com/boisjacques/hc/util"
+	"github.com/brutella/dnssd"
 	"github.com/xiam/to"
 )
 
@@ -135,7 +135,8 @@ func NewIPTransport(config Config, a *accessory.Accessory, as ...*accessory.Acce
 	return t, err
 }
 
-func (t *ipTransport) Start() {
+func (t *ipTransport) Start(wg *sync.WaitGroup) {
+	defer wg.Done()
 	// Create server which handles incoming tcp connections
 	config := http.Config{
 		Port:      t.config.Port,
