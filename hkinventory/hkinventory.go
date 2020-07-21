@@ -13,10 +13,10 @@ func main() {
 	username := flag.String("username", "mqttuser", "mqtt user")
 	password := flag.String("password", "mqttpassword", "mqtt password")
 	uri := flag.String("uri", "tcp://192.168.2.250:1883", "mqtt broker uri")
-	cid := flag.String("cid", "FreeBSD", "ClientID")
+	cid := flag.String("cid", "test-client", "mqtt client id")
 	flag.Parse()
 
-	transports := make([]hc.Transport, 0)
+	accessories := make([]accessory.MqttAccessory, 0)
 	bridge := *mqtt.NewMQTTBridge()
 	var wg sync.WaitGroup
 
@@ -27,8 +27,8 @@ func main() {
 			Manufacturer: "HoChiMinh Flowerpower Enterprises",
 			DeviceType:   9,
 			Topics: []string{
-				"/home/manu/temperature",
-				"/home/manu/humidity",
+				"home/manu/temperature",
+				"home/manu/humidity",
 			},
 		},
 		{
@@ -36,8 +36,8 @@ func main() {
 			Manufacturer: "HoChiMinh Flowerpower Enterprises",
 			DeviceType:   9,
 			Topics: []string{
-				"/home/mancave/temperature",
-				"/home/mancave/humidity",
+				"home/mancave/temperature",
+				"home/mancave/humidity",
 			},
 		},
 		{
@@ -45,8 +45,8 @@ func main() {
 			Manufacturer: "HoChiMinh Flowerpower Enterprises",
 			DeviceType:   9,
 			Topics: []string{
-				"/home/basement/temperature",
-				"/home/basement/humidity",
+				"home/basement/temperature",
+				"home/basement/humidity",
 			},
 		},
 	}
@@ -56,18 +56,23 @@ func main() {
 
 	for _, info := range infos {
 		acc := accessory.NewMqttAccessory(info)
+		accessories = append(accessories, *acc)
 		for _, topic := range info.Topics {
 			dispatcher.AddTopic(topic, *acc)
 		}
-		var tCast hc.Transport = t
-		transports = append(transports, tCast)
 	}
 
-	t, err := hc.NewIPTransport(hc.Config{Pin: "11223344"}, acc.Accessory)
+	hkbridge := accessory.NewBridge(accessory.Info{
+		Name:             "Bridge",
+		SerialNumber:     "1312",
+	})
+	t, err := hc.NewIPTransport(hc.Config{Pin: "11223344"}, hkbridge.Accessory, accessories[0].Accessory,
+		accessories[1].Accessory,
+		accessories[2].Accessory)
 	if err != nil {
 		log.Fatal(err)
 	}
-	dispatcher.Listen()
+	go dispatcher.Listen()
 
 	hc.OnTermination(func() {
 		<-t.Stop()
