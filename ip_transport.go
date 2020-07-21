@@ -3,6 +3,7 @@ package hc
 import (
 	"bytes"
 	"context"
+	"image"
 	"io/ioutil"
 	"net"
 	"strings"
@@ -16,11 +17,9 @@ import (
 	"github.com/boisjacques/hc/hap"
 	"github.com/boisjacques/hc/hap/endpoint"
 	"github.com/boisjacques/hc/hap/http"
-	"github.com/boisjacques/hc/log"
 	"github.com/boisjacques/hc/util"
-	"github.com/gosexy/to"
-
-	"image"
+	"github.com/boisjacques/hc/log"
+	"github.com/xiam/to"
 )
 
 type ipTransport struct {
@@ -126,7 +125,7 @@ func NewIPTransport(config Config, a *accessory.Accessory, as ...*accessory.Acce
 		cfg.discoverable = false
 	}
 
-	cfg.categoryId = int(t.container.AccessoryType())
+	cfg.categoryId = uint8(t.container.AccessoryType())
 	cfg.updateConfigHash(t.container.ContentHash())
 	cfg.save(storage)
 
@@ -137,7 +136,6 @@ func NewIPTransport(config Config, a *accessory.Accessory, as ...*accessory.Acce
 }
 
 func (t *ipTransport) Start() {
-
 	// Create server which handles incoming tcp connections
 	config := http.Config{
 		Port:      t.config.Port,
@@ -205,6 +203,18 @@ func (t *ipTransport) Stop() <-chan struct{} {
 	t.cancel()
 
 	return t.stopped
+}
+
+// XHMURI returns a X-HM styled uri to easily add the accessory to HomeKit.
+// To print a QR code to the console, use the follow code snippet.
+// ```
+// import "github.com/mdp/qrterminal/v3"
+//
+// uri, _ := transport.XHMURI()
+// qrterminal.Generate(uri, qrterminal.L, os.Stdout)
+// ```
+func (t *ipTransport) XHMURI() (string, error) {
+	return t.config.XHMURI(util.SetupFlagIP)
 }
 
 // isPaired returns true when the transport is already paired
@@ -302,9 +312,10 @@ func newService(config *Config) dnssd.Service {
 	}
 
 	dnsCfg := dnssd.Config{
-		Name:   stripped,
+		Name:   util.RemoveAccentsFromString(stripped),
 		Type:   "_hap._tcp",
 		Domain: "local",
+		Host:   strings.Replace(config.id, ":", "", -1), // use the id (without the colons) to get unique hostnames
 		Text:   config.txtRecords(),
 		IPs:    ips,
 		Port:   config.servePort,
