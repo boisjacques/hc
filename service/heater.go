@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/brutella/hc/characteristic"
+	"github.com/boisjacques/hc/characteristic"
 )
 
 type Heater struct {

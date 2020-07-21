@@ -16,7 +16,6 @@ import (
 	"github.com/boisjacques/hc/hap"
 	"github.com/boisjacques/hc/hap/endpoint"
 	"github.com/boisjacques/hc/hap/http"
-	"github.com/boisjacques/hc/util"
 	"github.com/boisjacques/hc/log"
 	"github.com/boisjacques/hc/util"
 	"github.com/brutella/dnssd"

@@ -3,6 +3,7 @@ package accessory
 import (
 	"crypto/md5"
 	"encoding/json"
+	"fmt"
 	"github.com/boisjacques/hc/log"
 )
 

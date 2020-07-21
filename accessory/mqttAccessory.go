@@ -15,7 +15,7 @@ type MqttAccessory struct {
 	txTopics       []string
 	TempSensor     *service.TemperatureSensor
 	HumiditySensor *service.HumiditySensor
-	Light          *service.Lightbulb
+	Light          *service.ColoredLightbulb
 }
 
 func (a *MqttAccessory) HandleMessage(msg mqtt.Message) {
@@ -43,12 +43,11 @@ func (a *MqttAccessory) handleHumidity(humidity float64) {
 }
 
 func NewMqttAccessory(info Info) *MqttAccessory {
-	// TODO: Look up operation details in thermometer.go
 	acc := MqttAccessory{}
 	typ, _ := strconv.Atoi(info.Model)
 	acc.Accessory = New(info, AccessoryType(typ))
 	if typ == 5 {
-		acc.Light = service.NewLightbulb()
+		acc.Light = service.NewColoredLightbulb()
 		acc.Light.Hue.SetValue(0)
 		acc.Light.Saturation.SetValue(0)
 		acc.Light.Brightness.SetValue(0)

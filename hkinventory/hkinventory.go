@@ -4,8 +4,8 @@ import (
 	"flag"
 	"github.com/boisjacques/hc"
 	"github.com/boisjacques/hc/accessory"
+	"github.com/boisjacques/hc/log"
 	"github.com/boisjacques/hc/mqtt"
-	"log"
 	"sync"
 )
 
@@ -15,6 +15,7 @@ func main() {
 	uri := flag.String("uri", "tcp://192.168.2.250:1883", "mqtt broker uri")
 	cid := flag.String("cid", "test-client", "mqtt client id")
 	flag.Parse()
+	log.Debug.Enable()
 
 	accessories := make([]accessory.MqttAccessory, 0)
 	bridge := *mqtt.NewMQTTBridge()
@@ -63,14 +64,14 @@ func main() {
 	}
 
 	hkbridge := accessory.NewBridge(accessory.Info{
-		Name:             "Bridge",
-		SerialNumber:     "1312",
+		Name:         "Bridge",
+		SerialNumber: "1312",
 	})
 	t, err := hc.NewIPTransport(hc.Config{Pin: "11223344"}, hkbridge.Accessory, accessories[0].Accessory,
 		accessories[1].Accessory,
 		accessories[2].Accessory)
 	if err != nil {
-		log.Fatal(err)
+		log.Debug.Fatalln(err)
 	}
 	go dispatcher.Listen()
 
