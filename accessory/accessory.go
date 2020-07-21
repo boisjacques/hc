@@ -10,6 +10,8 @@ type Info struct {
 	Manufacturer     string
 	Model            string
 	FirmwareRevision string
+	DeviceType       AccessoryType
+	Topics           []string
 }
 
 // Accessory is a HomeKit accessory.

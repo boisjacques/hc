@@ -22,7 +22,7 @@ func NewContainer() *Container {
 }
 
 // AddAccessory adds an accessory to the container.
-// This method ensures that the accessory ids are valid and unique withing the container.
+// This method ensures that the accessory ids are valid and unique within the container.
 func (m *Container) AddAccessory(a *Accessory) {
 	a.UpdateIDs()
 	a.ID = m.idCount
