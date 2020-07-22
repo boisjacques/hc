@@ -32,7 +32,7 @@ func main() {
 
 	acc := accessory.NewMqttAccessory(info)
 	for _, topic := range info.Topics {
-		dispatcher.AddTopic(topic, *acc)
+		dispatcher.Subscribe(topic, *acc)
 	}
 
 	t, err := hc.NewIPTransport(hc.Config{Pin: "11223344"}, acc.Accessory)

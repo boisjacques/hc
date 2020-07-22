@@ -45,7 +45,7 @@ func (a *MqttAccessory) handleHumidity(humidity float64) {
 	log.Info.Printf("Humidity set to %f\n", humidity)
 }
 
-func NewMqttAccessory(info Info) *MqttAccessory {
+func NewMqttAccessory(info Info, publishChannel chan string) *MqttAccessory {
 	acc := MqttAccessory{}
 	acc.Accessory = New(info, info.DeviceType)
 	if info.DeviceType == 5 {
@@ -54,6 +54,38 @@ func NewMqttAccessory(info Info) *MqttAccessory {
 		acc.Light.Saturation.SetValue(0)
 		acc.Light.Brightness.SetValue(0)
 		acc.AddService(acc.Light.Service)
+		acc.Light.On.OnValueRemoteUpdate(func(power bool) {
+			log.Debug.Printf("Changed State for %v\n", acc.ID)
+			var sb strings.Builder
+			sb.WriteString(info.Topics[0])
+			sb.WriteString(strconv.FormatBool(power))
+			publishChannel <- sb.String()
+		})
+
+		acc.Light.Hue.OnValueRemoteUpdate(func(value float64) {
+			log.Debug.Printf("Changed Hue for %d to %f", info.ID, value)
+			var sb strings.Builder
+			sb.WriteString(info.Topics[0])
+			sb.WriteString(strconv.FormatFloat(value, 'f', -1, 64))
+			publishChannel <- sb.String()
+		})
+
+		acc.Light.Saturation.OnValueRemoteUpdate(func(value float64) {
+			log.Debug.Printf("Changed Saturation for %d to %f", info.ID, value)
+			var sb strings.Builder
+			sb.WriteString(info.Topics[0])
+			sb.WriteString(strconv.FormatFloat(value, 'f', -1, 64))
+			publishChannel <- sb.String()
+		})
+
+		acc.Light.Brightness.OnValueRemoteUpdate(func(value int) {
+			log.Debug.Printf("Changed Brightness for %d to %d", info.ID, value)
+			var sb strings.Builder
+			sb.WriteString(info.Topics[0])
+			sb.WriteString(strconv.FormatInt(int64(value), 10))
+			publishChannel <- sb.String()
+		})
+
 		log.Debug.Printf("Topic:\t%v\tService:\t%v\n", acc.Type, acc.Light.Type)
 	} else if info.DeviceType == 9 {
 		acc.TempSensor = service.NewTemperatureSensor()

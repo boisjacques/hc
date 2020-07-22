@@ -4,6 +4,7 @@ import (
 	"github.com/boisjacques/hc/accessory"
 	"github.com/boisjacques/hc/log"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"strings"
 )
 
 type Dispatcher struct {
@@ -22,13 +23,26 @@ func NewDispatcher(client mqtt.Client) *Dispatcher {
 	}
 }
 
-func (d *Dispatcher) AddTopic(topic string, acc accessory.MqttAccessory) {
+func (d *Dispatcher) Subscribe(topic string, acc accessory.MqttAccessory) {
 	d.deviceMap[topic] = acc
 	go func() {
 		d.client.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
 			log.Debug.Println("Waiting for message...")
 			d.rx <- msg
 		})
+	}()
+}
+
+func (d *Dispatcher) Publish(publishChannel chan string) {
+	go func() {
+		for {
+			log.Debug.Println("Waiting for message...")
+			msg := <-publishChannel
+			splitstring := strings.Split(msg, ":")
+			topic := splitstring[0]
+			message := splitstring[1]
+			d.client.Publish(topic, 0, false, message)
+		}
 	}()
 }
 

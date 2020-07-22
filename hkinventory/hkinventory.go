@@ -24,52 +24,33 @@ func main() {
 	// TODO: Write json config with accessories	}
 	infos := []accessory.Info{
 		{
-			Name:         "Manucave",
+			Name:         "Testlight",
 			Manufacturer: "HoChiMinh Flowerpower Enterprises",
-			DeviceType:   9,
+			DeviceType:   accessory.TypeLightbulb,
 			Topics: []string{
 				"home/manu/temperature",
-				"home/manu/humidity",
-			},
-		},
-		{
-			Name:         "Mancave",
-			Manufacturer: "HoChiMinh Flowerpower Enterprises",
-			DeviceType:   9,
-			Topics: []string{
-				"home/mancave/temperature",
-				"home/mancave/humidity",
-			},
-		},
-		{
-			Name:         "Basement",
-			Manufacturer: "HoChiMinh Flowerpower Enterprises",
-			DeviceType:   9,
-			Topics: []string{
-				"home/basement/temperature",
-				"home/basement/humidity",
 			},
 		},
 	}
 
 	client := bridge.Register(*username, *password, *cid, *uri)
 	dispatcher := mqtt.NewDispatcher(client)
+	publishChannel := make(chan string)
 
 	for _, info := range infos {
-		acc := accessory.NewMqttAccessory(info)
+		acc := accessory.NewMqttAccessory(info, publishChannel)
 		accessories = append(accessories, *acc)
 		for _, topic := range info.Topics {
-			dispatcher.AddTopic(topic, *acc)
+			dispatcher.Subscribe(topic, *acc)
 		}
 	}
+	dispatcher.Publish(publishChannel)
 
 	hkbridge := accessory.NewBridge(accessory.Info{
 		Name:         "Bridge",
 		SerialNumber: "1312",
 	})
-	t, err := hc.NewIPTransport(hc.Config{Pin: "11223344"}, hkbridge.Accessory, accessories[0].Accessory,
-		accessories[1].Accessory,
-		accessories[2].Accessory)
+	t, err := hc.NewIPTransport(hc.Config{Pin: "11223344"}, hkbridge.Accessory, accessories[0].Accessory)
 	if err != nil {
 		log.Debug.Fatalln(err)
 	}
