@@ -38,6 +38,7 @@ func (d *Dispatcher) Publish(publishChannel chan string) {
 		for {
 			log.Debug.Println("Waiting for message...")
 			msg := <-publishChannel
+			log.Debug.Printf("Message: %s\n", msg)
 			splitstring := strings.Split(msg, ":")
 			topic := splitstring[0]
 			message := splitstring[1]

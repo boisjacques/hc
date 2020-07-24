@@ -28,7 +28,10 @@ func main() {
 			Manufacturer: "HoChiMinh Flowerpower Enterprises",
 			DeviceType:   accessory.TypeLightbulb,
 			Topics: []string{
-				"home/manu/temperature",
+				"home/manu/light/on",
+				"home/manu/light/hue",
+				"home/manu/light/saturation",
+				"home/manu/light/brightness",
 			},
 		},
 	}
@@ -40,8 +43,10 @@ func main() {
 	for _, info := range infos {
 		acc := accessory.NewMqttAccessory(info, publishChannel)
 		accessories = append(accessories, *acc)
-		for _, topic := range info.Topics {
-			dispatcher.Subscribe(topic, *acc)
+		if info.DeviceType != accessory.TypeLightbulb {
+			for _, topic := range info.Topics {
+				dispatcher.Subscribe(topic, *acc)
+			}
 		}
 	}
 	dispatcher.Publish(publishChannel)

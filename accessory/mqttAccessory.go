@@ -58,6 +58,7 @@ func NewMqttAccessory(info Info, publishChannel chan string) *MqttAccessory {
 			log.Debug.Printf("Changed State for %v\n", acc.ID)
 			var sb strings.Builder
 			sb.WriteString(info.Topics[0])
+			sb.WriteString(":")
 			sb.WriteString(strconv.FormatBool(power))
 			publishChannel <- sb.String()
 		})
@@ -65,7 +66,8 @@ func NewMqttAccessory(info Info, publishChannel chan string) *MqttAccessory {
 		acc.Light.Hue.OnValueRemoteUpdate(func(value float64) {
 			log.Debug.Printf("Changed Hue for %d to %f", info.ID, value)
 			var sb strings.Builder
-			sb.WriteString(info.Topics[0])
+			sb.WriteString(info.Topics[1])
+			sb.WriteString(":")
 			sb.WriteString(strconv.FormatFloat(value, 'f', -1, 64))
 			publishChannel <- sb.String()
 		})
@@ -73,7 +75,8 @@ func NewMqttAccessory(info Info, publishChannel chan string) *MqttAccessory {
 		acc.Light.Saturation.OnValueRemoteUpdate(func(value float64) {
 			log.Debug.Printf("Changed Saturation for %d to %f", info.ID, value)
 			var sb strings.Builder
-			sb.WriteString(info.Topics[0])
+			sb.WriteString(info.Topics[2])
+			sb.WriteString(":")
 			sb.WriteString(strconv.FormatFloat(value, 'f', -1, 64))
 			publishChannel <- sb.String()
 		})
@@ -81,7 +84,8 @@ func NewMqttAccessory(info Info, publishChannel chan string) *MqttAccessory {
 		acc.Light.Brightness.OnValueRemoteUpdate(func(value int) {
 			log.Debug.Printf("Changed Brightness for %d to %d", info.ID, value)
 			var sb strings.Builder
-			sb.WriteString(info.Topics[0])
+			sb.WriteString(info.Topics[3])
+			sb.WriteString(":")
 			sb.WriteString(strconv.FormatInt(int64(value), 10))
 			publishChannel <- sb.String()
 		})
