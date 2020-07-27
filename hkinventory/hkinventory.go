@@ -21,10 +21,10 @@ func main() {
 	bridge := *mqtt.NewMQTTBridge()
 	var wg sync.WaitGroup
 
-	// TODO: Write json config with accessories	}
+	// TODO: Write json config with accessories
 	infos := []accessory.Info{
 		{
-			Name:         "Testlight",
+			Name:         "projectada",
 			Manufacturer: "HoChiMinh Flowerpower Enterprises",
 			DeviceType:   accessory.TypeLightbulb,
 			Topics: []string{
@@ -32,6 +32,33 @@ func main() {
 				"home/manu/light/hue",
 				"home/manu/light/saturation",
 				"home/manu/light/brightness",
+			},
+		},
+		{
+			Name:         "Manucave",
+			Manufacturer: "HoChiMinh Flowerpower Enterprises",
+			DeviceType:   accessory.TypeThermostat,
+			Topics: []string{
+				"home/manu/temperature",
+				"home/manu/humidity",
+			},
+		},
+		{
+			Name:         "Mancave",
+			Manufacturer: "HoChiMinh Flowerpower Enterprises",
+			DeviceType:   accessory.TypeThermostat,
+			Topics: []string{
+				"home/mancave/temperature",
+				"home/mancave/humidity",
+			},
+		},
+		{
+			Name:         "Basement",
+			Manufacturer: "HoChiMinh Flowerpower Enterprises",
+			DeviceType:   accessory.TypeThermostat,
+			Topics: []string{
+				"home/basement/temperature",
+				"home/basement/humidity",
 			},
 		},
 	}
